@@ -39,10 +39,10 @@ public class TagLibMultiLanguageQuoteServlet extends HttpServlet {
 	public void afficherBoutonActualiser(HttpServletRequest request,HttpServletResponse response) throws IOException, ServletException {
 		response.setContentType("text/html");
 		if(request.getParameter("langue")==null || request.getParameter("langue").equals("Français")) {
-			getServletContext().getRequestDispatcher("/Quotefr.jsp").forward(request,response);
+			getServletContext().getRequestDispatcher("/QuoteTag.jsp").forward(request,response);
 		}
 		else {
-			getServletContext().getRequestDispatcher("/Quote-en.jsp").forward(request,response);
+			getServletContext().getRequestDispatcher("/QuoteTag.jsp").forward(request,response);
 		}
 		
 	}

@@ -91,7 +91,7 @@
 		<input type='submit' name='refresh' value='Actualiser'>
 	</form>
 	<img
-		src="/TPJSP_Alejandra_Valentin/QuoteRating?option=<%= selection %>">
+		src="/TPTAG_Alejandra_Valentin/QuoteRating?option=<%= selection %>">
 	<h2>
 		Le montant en dollard de la devise
 		<% out.print(myBean.getName()); %>

@@ -28,7 +28,12 @@ public class I18NQuote extends TagSupport {
 	
 	public int doStartTag() throws JspException {
 		try {
-			pageContext.getOut().println("Hello World !");
+			if (lang != null) {
+		         /* Use message from attribute */
+			pageContext.getOut().println(lang);
+			}else {
+				pageContext.getOut().println("No language selected");
+			}
 		} catch (IOException e) {
 			throw new JspException("I/O Error", e);
 		}
