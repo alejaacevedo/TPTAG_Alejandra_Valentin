@@ -34,7 +34,6 @@ public class I18NQuote extends TagSupport {
 	
 	public int doStartTag() throws JspException {
 		try {
-			System.out.println("L: "+lang);
 			Locale locale = new Locale(lang,"");
 			ResourceBundle myResources = ResourceBundle.getBundle("org.mines.douai.j2ee.tp.lepez.resources.I18NBundle", locale);
 			pageContext.getOut().println(myResources.getString(key));

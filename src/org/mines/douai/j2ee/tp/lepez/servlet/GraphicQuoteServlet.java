@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,29 +33,31 @@ import java.awt.Color;
 public class GraphicQuoteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	public Path2D drawPolyline( List<Double> yPoints) {
+	public Path2D drawPolyline( int[] yPoints) {
 		
-		List<Integer> days = Stream.iterate(1, n -> n + 1)
-                .limit(30)
-                .collect(Collectors.toList());
-			Path2D path = new Path2D.Float(Path2D.WIND_EVEN_ODD, days.size()-1);
-			path.moveTo(days.get(0), yPoints.get(0));
-			for (int i = 1; i < (days.size()-1); i++) {
-				path.lineTo(days.get(i), yPoints.get(i));
+			Path2D path = new Path2D.Float(Path2D.WIND_EVEN_ODD, 30);
+			path.moveTo(10, yPoints[0]);
+			for (int i = 1; i < 30; i++) {
+				path.lineTo(10+ i*10, yPoints[i]);
 			}
 			return path;
 	}
 	
-	public List<Double> generatePoints(String selectedCurrency) {
-		ModelRandomCurrency bean = new ModelRandomCurrency();
-		List<Double> currencyEvolution= new ArrayList<Double>();
-		for(int i=0; i<31; i++) {
-			currencyEvolution.add(bean.updateCurrency().get(selectedCurrency).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());	
+	public int[] generatePoints(int maxValue) {
+		int currencyEvolution[] = new int[30];
+		for(int i=0; i<30; i++) {
+			currencyEvolution[i]= generateRandomPrice(maxValue);	
 		}
 		
 		return currencyEvolution;
 	}
 	
+	public int generateRandomPrice(int max){
+		Random random = new Random();
+		int price = random.nextInt(max+1);
+		return price;
+		
+	}
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -70,41 +74,30 @@ public class GraphicQuoteServlet extends HttpServlet {
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.setContentType("image/png");
+		ServletOutputStream out = response.getOutputStream();
 		String selectedCurrency = request.getParameter("option");
 		if (selectedCurrency.equals("Bitcoin")) {
-			ServletOutputStream out = response.getOutputStream();
-			BufferedImage bufferedImage = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
-			Graphics2D g2d = bufferedImage.createGraphics();
-			// Draw on the image
-			g2d.setPaint(Color.red);
-			g2d.draw(drawPolyline(generatePoints("Bitcoin")));
-			/*g2d.translate(200, 1);
-			g2d.scale(3.0, 3.0);
-			g2d.draw(drawPolyline(generatePoints("Bitcoin")));*/
-			// Sauver l’image dans le flux de sortie
-			ImageIO.write(bufferedImage, "png", out);
-			g2d.dispose();
+			createImage(out, Color.red);
 		} else if (selectedCurrency.equals("Litecoin")) {
-			ServletOutputStream out = response.getOutputStream();
-			BufferedImage bufferedImage = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
-			Graphics2D g2d = bufferedImage.createGraphics();
-			// Draw on the image
-			g2d.setColor(Color.blue);
-			g2d.draw(drawPolyline(generatePoints("Litecoin")));
-			// Sauver l’image dans le flux de sortie
-			ImageIO.write(bufferedImage, "png", out);
-			g2d.dispose();
+			createImage(out,Color.blue);
 		} else if(selectedCurrency.equals("Namecoin")) {
-			ServletOutputStream out = response.getOutputStream();
-			BufferedImage bufferedImage = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
-			Graphics2D g2d = bufferedImage.createGraphics();
-			// Draw on the image
-			g2d.setColor(Color.green);
-			g2d.draw(drawPolyline(generatePoints("Namecoin")));
-			// Sauver l’image dans le flux de sortie
-			ImageIO.write(bufferedImage, "png", out);
-			g2d.dispose();
+			createImage(out,Color.green);
 		}
+	}
+
+	private void createImage(ServletOutputStream out, Color color) throws IOException {
+		BufferedImage bufferedImage = new BufferedImage(210, 210, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g2d = bufferedImage.createGraphics();
+		// Draw on the image
+		g2d.setColor(Color.white);
+		g2d.fillRect(0, 0, 210, 210);
+		g2d.setColor(color.black);
+		g2d.fillRect(1, 1, 2, 209);
+		g2d.fillRect(1, 209, 209, 3);
+		g2d.setPaint(color);
+		g2d.draw(drawPolyline(generatePoints(100)));
+		ImageIO.write(bufferedImage, "png", out);
+		g2d.dispose();
 	}
 
 	/**
