@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <jsp:useBean id="myBean" scope="request"
-	class="org.mines.douai.j2ee.tp.lepez.bean.QuoteBean" />
+	type="org.mines.douai.j2ee.tp.lepez.bean.QuoteBean" />
 
 <!DOCTYPE html>
 <html>
@@ -21,8 +21,8 @@
 		<% if (langue == null) { %>
 
 		<select name="langue">
-			<option value='Français'>Français</option>
-			<option value='English'>English</option>
+			<option value='fr'>Français</option>
+			<option value='en'>English</option>
 		</select>
 		
 
@@ -31,9 +31,9 @@
 
 		<h2>Choix de la langue</h2>
 		<select name="langue">
-			<option value='Français'
+			<option value='fr'
 				<%out.print(myBean.printSelectedLangue(myBean.isFrançais(langue))); %>>Français</option>
-			<option value='English'
+			<option value='en'
 				<%out.print(myBean.printSelectedLangue(myBean.isEnglish(langue))); %>>English</option>
 		</select> 
 		
@@ -50,7 +50,7 @@
 		<input type='submit' name='refresh' value='Actualiser'>
 	</form>
 	<% }  else { %>
-	<% myBean.setName(selection); %>
+	<% myBean.setSelection(selection); %>
 	<% myBean.setValue(selection); %>
 
 		
@@ -60,8 +60,8 @@
 
 		<h2>Choix de la langue</h2>
 		<select name="langue">
-			<option value='Français'>Français</option>
-			<option value='English'>English</option>
+			<option value='fr'>Français</option>
+			<option value='en'>English</option>
 		</select>
 
 		<%}else{ %>
@@ -69,9 +69,9 @@
 
 		<h2>Choix de la langue</h2>
 		<select name="langue">
-			<option value='Français'
+			<option value='fr'
 				<%out.print(myBean.printSelectedLangue(myBean.isFrançais(langue))); %>>Français</option>
-			<option value='English'
+			<option value='en'
 				<%out.print(myBean.printSelectedLangue(myBean.isEnglish(langue))); %>>English</option>
 		</select> 
 		
@@ -94,58 +94,14 @@
 		src="/TPTAG_Alejandra_Valentin/QuoteRating?option=<%= selection %>">
 	<h2>
 		Le montant en dollard de la devise
-		<% out.print(myBean.getName()); %>
+		<% out.print(myBean.getSelection()); %>
 		est de
 		<% out.print(myBean.getValue());%>
 	</h2>
 
 	<% } %>
-
-	<%-- DEPRECATED CODE --%>
-	<%--  <% if (request.getParameter("option") == null) { %>
-	<form method=Post>
-		<select name='option'>
-			<option value='Bitcoin'>Bitcoin</option>
-			<option value='Litecoin'>Litecoin</option>
-			<option value='Namecoin'>Namecoin</option>
-		</select> <input type='submit' name='refresh' value='Actualiser'>
-	</form>
-	<% }  else if (request.getParameter("option").equals("Bitcoin")) {%>
-	<form method=Post>
-		<select name='option'>
-			<option value='Bitcoin' selected='selected'>Bitcoin</option>
-			<option value='Litecoin'>Litecoin</option>
-			<option value='Namecoin'>Namecoin</option>
-		</select> <input type='submit' name='refresh' value='Actualiser'>
-	</form>
-	<img src="/TPJSP_Alejandra_Valentin/QuoteRating?option=<%= selection %>">
-	<%} else if (request.getParameter("option").equals("Litecoin")) { %>
-
-	<form method=Post>
-		<select name='option'>
-			<option value='Bitcoin'>Bitcoin</option>
-			<option value='Litecoin' selected='selected'>Litecoin</option>
-			<option value='Namecoin'>Namecoin</option>
-		</select> <input type='submit' name='refresh' value='Actualiser'>
-	</form>
-	<img src="/TPJSP_Alejandra_Valentin/QuoteRating?option=<%= selection %>">
-	<% } else { %>
-	<form method=Post>
-		<select name='option'>
-			<option value='Bitcoin'>Bitcoin</option>
-			<option value='Litecoin'>Litecoin</option>
-			<option value='Namecoin' selected='selected'>Namecoin</option>
-		</select> <input type='submit' name='refresh' value='Actualiser'>
-	</form>
 	
-	<img src="/TPJSP_Alejandra_Valentin/QuoteRating?option=<%= selection %>">
-	<h2>Le montant en dollard de la devise est de  <% out.print(myBean.getValue());%> </h2> 
- <% } %> --%>
-
-
-
-
-
+	<br/><a href="./index.html">./index.html</a>
 
 </body>
 </html>

@@ -1,12 +1,18 @@
 package org.mines.douai.j2ee.tp.lepez.tag;
 
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 public class I18NQuote extends TagSupport {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public String lang;
 	public String key;
 
@@ -28,12 +34,10 @@ public class I18NQuote extends TagSupport {
 	
 	public int doStartTag() throws JspException {
 		try {
-			if (lang != null) {
-		         /* Use message from attribute */
-			pageContext.getOut().println(lang);
-			}else {
-				pageContext.getOut().println("No language selected");
-			}
+			System.out.println("L: "+lang);
+			Locale locale = new Locale(lang,"");
+			ResourceBundle myResources = ResourceBundle.getBundle("org.mines.douai.j2ee.tp.lepez.resources.I18NBundle", locale);
+			pageContext.getOut().println(myResources.getString(key));
 		} catch (IOException e) {
 			throw new JspException("I/O Error", e);
 		}

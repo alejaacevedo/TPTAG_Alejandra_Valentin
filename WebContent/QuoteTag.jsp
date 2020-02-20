@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-    <jsp:useBean id="myBean" scope="request"
-	class="org.mines.douai.j2ee.tp.lepez.bean.QuoteBean" />
+	pageEncoding="ISO-8859-1"%>
+<jsp:useBean id="myBean" beanName="myBean" scope="request"
+	type="org.mines.douai.j2ee.tp.lepez.bean.QuoteBean" />
+<%@ taglib prefix="langTag" uri="WEB-INF/tlds/tp.tld"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,44 +10,46 @@
 <title>TagLib TP</title>
 </head>
 <body>
-	<% String selection= request.getParameter("option"); %>
-	<% String langue=request.getParameter("langue"); %>
-<%@ taglib prefix="langTag" uri="WEB-INF/tlds/tp.tld"%>
-	<langTag:I18NQuote lang="<%=langue %>" key="ok"/>
+	<% String selection= myBean.getSelection(); %>
+	<% myBean.setValue(selection); %>
+	<% String langue=myBean.getLangue(); %>
 	
+	<h1>
+		<langTag:I18NQuote lang="<%=myBean.getLangue() %>" key="title" />
+
+	</h1>
+
 	<form method=Post>
 
-		<h2>Choix de la langue</h2>
-
-		<% if (langue == null) { %>
+		<h2><langTag:I18NQuote lang="<%=myBean.getLangue() %>" key="header.chooseLanguage" /></h2>
 
 		<select name="langue">
-			<option value='fr'>Français</option>
-			<option value='en'>English</option>
+			<option value='fr'
+				<%out.print(myBean.printSelectedLangue(myBean.isFrançais(langue))); %>><langTag:I18NQuote lang="<%=langue %>" key="language.french" /></option>
+			<option value='en'
+				<%out.print(myBean.printSelectedLangue(myBean.isEnglish(langue))); %>><langTag:I18NQuote lang="<%=langue %>" key="language.english" /></option>
 		</select>
 		
-
-		<%}else{ %>
-
-		<select name="langue">
-			<option value='Français'
-				<%out.print(myBean.printSelectedLangue(myBean.isFrançais(langue))); %>>Français</option>
-			<option value='English'
-				<%out.print(myBean.printSelectedLangue(myBean.isEnglish(langue))); %>>English</option>
-		</select> 
-		<% }  %>
-		<br/>
-		<h2>Choix de la devise</h2>
+		<br />
+		<h2><langTag:I18NQuote lang="<%=langue %>" key="header.chooseCurrency"/></h2>
 		<select name='option'>
-			<option value='Bitcoin'>Bitcoin</option>
-			<option value='Litecoin'>Litecoin</option>
-			<option value='Namecoin'>Namecoin</option>
-		</select> 
-		<br/>
-		<br/>
-		<input type='submit' name='refresh' value='Actualiser'>
-	</form>
-		
+			<%
+				for (String key : myBean.getCurrencies().keySet()) {
+					if (myBean.getSelection().equals(key))
+						out.println("<option value=\"" + key + "\" selected>" + key + "</option>");
+					else
+						out.println("<option value=\"" + key + "\">" + key + "</option>");
+				}
+			%>
+		</select> <br /> <br /> <input type='submit' name='refresh' value='<langTag:I18NQuote lang="<%=langue %>" key="button.Refresh" />'>
+	</form> <br/>
 	
+	<img
+		src="/TPTAG_Alejandra_Valentin/QuoteRating?option=<%= selection %>"> <br/>
+	
+	<h2> <langTag:I18NQuote lang="<%=langue %>" key="message.selectedCurrency" /> <% out.print(myBean.getValue());%> </h2>
+
+	<br/><a href="./index.html">./index.html</a>
+
 </body>
 </html>
