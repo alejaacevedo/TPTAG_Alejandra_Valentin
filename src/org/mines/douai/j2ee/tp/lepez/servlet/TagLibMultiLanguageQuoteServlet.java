@@ -33,17 +33,14 @@ public class TagLibMultiLanguageQuoteServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		this.afficherBoutonActualiser(request,response);
+		this.afficherBoutonActualiser(request,response, "fr", "Bitcoin");
 	}
 	
-	public void afficherBoutonActualiser(HttpServletRequest request,HttpServletResponse response) throws IOException, ServletException {
+	public void afficherBoutonActualiser(HttpServletRequest request,HttpServletResponse response,String language,String selected) throws IOException, ServletException {
 		response.setContentType("text/html");
-		if(request.getParameter("langue")==null || request.getParameter("langue").equals("Français")) {
-			getServletContext().getRequestDispatcher("/Quotefr.jsp").forward(request,response);
-		}
-		else {
-			getServletContext().getRequestDispatcher("/Quote-en.jsp").forward(request,response);
-		}
+			QuoteBean myBean = new QuoteBean(language,selected);
+			request.setAttribute("myBean", myBean);
+			getServletContext().getRequestDispatcher("/QuoteTag.jsp").forward(request,response);
 		
 	}
 	
@@ -52,8 +49,16 @@ public class TagLibMultiLanguageQuoteServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
-		this.doGet(request,response);
+		String language = "fr";
+		if (request.getParameter("langue") != null) {
+			language = request.getParameter("langue");			
+		}
+		String selected = "Bitcoin";
+		if (request.getParameter("option") != null) {
+			selected = request.getParameter("option");			
+		}
+		this.afficherBoutonActualiser(request,response, language, selected);
+		//this.doGet(request,response);
 				
 	}
 

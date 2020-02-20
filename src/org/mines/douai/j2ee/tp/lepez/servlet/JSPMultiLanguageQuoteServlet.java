@@ -17,13 +17,13 @@ import org.mines.douai.j2ee.tp.lepez.bean.QuoteBean;
  * Servlet implementation class SimpleQuoteServlet
  */
 @WebServlet("/JSPMultiLanguageQuote")
-public class TPJSP_Alejandra_Valentin extends HttpServlet {
+public class JSPMultiLanguageQuoteServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public TPJSP_Alejandra_Valentin() {
+    public JSPMultiLanguageQuoteServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,12 +33,14 @@ public class TPJSP_Alejandra_Valentin extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		this.afficherBoutonActualiser(request,response);
+		this.afficherBoutonActualiser(request,response,"fr", "Bitcoin");
 	}
 	
-	public void afficherBoutonActualiser(HttpServletRequest request,HttpServletResponse response) throws IOException, ServletException {
+	public void afficherBoutonActualiser(HttpServletRequest request,HttpServletResponse response, String language,String selected) throws IOException, ServletException {
 		response.setContentType("text/html");
-		if(request.getParameter("langue")==null || request.getParameter("langue").equals("Français")) {
+		QuoteBean myBean = new QuoteBean(language,selected);
+		request.setAttribute("myBean", myBean);
+		if(request.getParameter("langue")==null || request.getParameter("langue").equals("fr")) {
 			getServletContext().getRequestDispatcher("/Quotefr.jsp").forward(request,response);
 		}
 		else {
@@ -52,7 +54,15 @@ public class TPJSP_Alejandra_Valentin extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	
+		String language = "fr";
+		if (request.getParameter("langue") != null) {
+			language = request.getParameter("langue");			
+		}
+		String selected = "Bitcoin";
+		if (request.getParameter("option") != null) {
+			selected = request.getParameter("option");			
+		}
+		this.afficherBoutonActualiser(request,response, language, selected);
 		this.doGet(request,response);
 				
 	}
